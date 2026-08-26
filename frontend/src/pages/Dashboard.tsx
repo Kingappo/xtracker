@@ -59,7 +59,7 @@ const Dashboard = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-          Welcome back, {user?.name} 👋
+          Welcome back, {user?.firstName} 👋
         </h1>
         <p className="text-sm sm:text-base text-gray-500 mb-6">
           Here's your financial overview.

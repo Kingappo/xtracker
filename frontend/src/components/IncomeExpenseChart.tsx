@@ -20,8 +20,6 @@ interface IncomeExpenseChartProps {
 }
 
 const IncomeExpenseChart = ({ chartData }: IncomeExpenseChartProps) => {
-  // "No data yet" means every month in the year has zero income and zero expense —
-  // a brand-new user's chart endpoint typically still returns all 12 months, just empty.
   const hasData = chartData.some((d) => d.income > 0 || d.expense > 0);
 
   return (

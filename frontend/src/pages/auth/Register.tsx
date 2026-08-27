@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { registerUser } from "../../api/authApi";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/navbar/PublicHeader";
@@ -26,6 +26,7 @@ const Register = () => {
     try {
       const data = await registerUser({ firstName, surname, email, password });
       login(data.token, data.user);
+      sessionStorage.setItem("isNewUser", "true");
       navigate(data.user.role === "admin" ? "/admin" : "/dashboard");
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {

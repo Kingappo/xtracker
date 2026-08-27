@@ -38,7 +38,7 @@ const Documentation = () => {
       {isLoggedIn ? <Navbar /> : <PublicHeader />}
 
       <div className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10">
-        {/* Mobile: open table of contents */}
+        {/* Mobile - open table of contents */}
         <button
           onClick={() => setIsMenuOpen(true)}
           className="lg:hidden flex items-center gap-2 mb-6 text-sm font-medium text-gray-700 border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-50"

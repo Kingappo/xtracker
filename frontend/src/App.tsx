@@ -27,6 +27,7 @@ import {
   ProtectedRoute,
   PublicOnlyRoute,
 } from "./components/ProtectionRoutes";
+import Documentation from "./pages/Documentation";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
           }
         />
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
+        <Route path="/documentation" element={<Documentation />} />
         <Route
           path="/forgot-password"
           element={

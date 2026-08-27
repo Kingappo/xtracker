@@ -13,6 +13,7 @@ const Navbar = () => {
     { name: "Expenses", href: "/expenses" },
     { name: "Budgets", href: "/budgets" },
     { name: "Categories", href: "/categories" },
+    { name: "Documentation", href: "/documentation" },
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

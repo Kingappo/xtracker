@@ -30,6 +30,12 @@ const Welcome = () => {
           >
             I already have an account
           </Link>
+          <Link
+            to="/documentation"
+            className="mt-4 text-sm text-blue-600 hover:underline"
+          >
+            Read the documentation →
+          </Link>
         </div>
 
         {/* Feature highlights */}

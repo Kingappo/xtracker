@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../../api/authApi";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/navbar/PublicHeader";

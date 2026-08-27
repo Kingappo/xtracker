@@ -41,9 +41,11 @@ export const getTransactions = async (req, res) => {
     const totalIncome = incomes.reduce((sum, i) => sum + i.amount, 0);
     const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-    const merged = [...incomes, ...expenses].sort(
-      (a, b) => new Date(b.date) - new Date(a.date),
-    );
+    const merged = [...incomes, ...expenses].sort((a, b) => {
+      const dateDiff = new Date(b.date) - new Date(a.date);
+      if (dateDiff !== 0) return dateDiff;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
 
     const total = merged.length;
     const startIndex = (page - 1) * limit;

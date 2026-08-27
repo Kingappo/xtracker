@@ -31,7 +31,7 @@ const TopLoadingBar = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed top-0 left-0 w-full h-0.8 z-100 bg-transparent">
+    <div className="fixed top-0 left-0 w-full h-1 z-100 bg-transparent">
       <div
         className="h-full bg-blue-600 transition-all duration-300 ease-out"
         style={{ width: `${progress}%` }}

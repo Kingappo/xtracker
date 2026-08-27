@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Navbar from "../components/navbar/Navbar";
 import Modal from "../components/Modal";
 import ConfirmModal from "../components/ConfirmModal";
@@ -9,6 +9,7 @@ import {
   deleteIncome,
 } from "../api/incomeApi";
 import { getCategories } from "../api/categoryApi";
+import { groupByMonth } from "../utils/groupByMonth";
 import type { Income, Category } from "../types";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import TransactionForm from "../components/forms/Transactionform";
@@ -94,6 +95,8 @@ const Incomes = () => {
     ? categories.find((c) => c._id === filterCategory)?.name
     : null;
 
+  const groupedIncomes = groupByMonth(incomes);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -112,7 +115,7 @@ const Incomes = () => {
           </button>
         </div>
 
-        {/* Category filter + total */}
+        {/* Category filter and overall total across all months */}
         <div className="flex flex-wrap justify-between items-center gap-3 bg-white rounded-lg border border-gray-200 p-4 mb-6">
           <select
             value={filterCategory}
@@ -180,68 +183,98 @@ const Incomes = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {incomes.map((income) => (
-                  <tr key={income._id}>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {new Date(income.date).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-900">
-                      {income.category.name}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
-                      {income.description || "—"}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-green-600 font-medium text-right">
-                      {formatCurrency(income.amount)}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <button
-                        onClick={() => openEditModal(income)}
-                        className="text-gray-400 hover:text-blue-600 mr-3"
-                      >
-                        <Pencil size={16} />
-                      </button>
-                      <button
-                        onClick={() => setDeleteTarget(income)}
-                        className="text-gray-400 hover:text-red-600"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
+                {groupedIncomes.map((group) => (
+                  <Fragment key={group.key}>
+                    <tr className="bg-gray-50">
+                      <td colSpan={5} className="px-4 py-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            {group.label}
+                          </span>
+                          <span className="text-xs font-semibold text-green-600">
+                            {formatCurrency(group.total)}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    {group.items.map((income) => (
+                      <tr key={income._id}>
+                        <td className="px-4 py-3 text-sm text-gray-600">
+                          {new Date(income.date).toLocaleDateString()}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900">
+                          {income.category.name}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-500">
+                          {income.description || "—"}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-green-600 font-medium text-right">
+                          {formatCurrency(income.amount)}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            onClick={() => openEditModal(income)}
+                            className="text-gray-400 hover:text-blue-600 mr-3"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            onClick={() => setDeleteTarget(income)}
+                            className="text-gray-400 hover:text-red-600"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </Fragment>
                 ))}
               </tbody>
             </table>
 
             {/* Mobile cards */}
             <div className="sm:hidden divide-y divide-gray-100">
-              {incomes.map((income) => (
-                <div key={income._id} className="p-4">
-                  <div className="flex justify-between items-start mb-1">
-                    <span className="text-sm font-medium text-gray-900">
-                      {income.category.name}
+              {groupedIncomes.map((group) => (
+                <div key={group.key}>
+                  <div className="flex justify-between items-center bg-gray-50 px-4 py-2">
+                    <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                      {group.label}
                     </span>
-                    <span className="text-sm text-green-600 font-medium">
-                      {formatCurrency(income.amount)}
+                    <span className="text-xs font-semibold text-green-600">
+                      {formatCurrency(group.total)}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mb-2">
-                    {new Date(income.date).toLocaleDateString()}
-                    {income.description ? ` · ${income.description}` : ""}
-                  </p>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => openEditModal(income)}
-                      className="text-xs text-blue-600 flex items-center gap-1"
-                    >
-                      <Pencil size={14} /> Edit
-                    </button>
-                    <button
-                      onClick={() => setDeleteTarget(income)}
-                      className="text-xs text-red-600 flex items-center gap-1"
-                    >
-                      <Trash2 size={14} /> Delete
-                    </button>
+                  <div className="divide-y divide-gray-100">
+                    {group.items.map((income) => (
+                      <div key={income._id} className="p-4">
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="text-sm font-medium text-gray-900">
+                            {income.category.name}
+                          </span>
+                          <span className="text-sm text-green-600 font-medium">
+                            {formatCurrency(income.amount)}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mb-2">
+                          {new Date(income.date).toLocaleDateString()}
+                          {income.description ? ` · ${income.description}` : ""}
+                        </p>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => openEditModal(income)}
+                            className="text-xs text-blue-600 flex items-center gap-1"
+                          >
+                            <Pencil size={14} /> Edit
+                          </button>
+                          <button
+                            onClick={() => setDeleteTarget(income)}
+                            className="text-xs text-red-600 flex items-center gap-1"
+                          >
+                            <Trash2 size={14} /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}

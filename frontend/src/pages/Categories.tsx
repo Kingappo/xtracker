@@ -10,8 +10,9 @@ import {
   deleteCategory,
 } from "../api/categoryApi";
 import type { Category } from "../types";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowLeft } from "lucide-react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -176,9 +177,25 @@ const Categories = () => {
         {isLoading ? (
           <p className="text-gray-500">Loading...</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {renderCategoryList(incomeCategories, "income")}
-            {renderCategoryList(expenseCategories, "expense")}
+          <div>
+            <div className="flex  justify-between">
+              <Link
+                to="/incomes"
+                className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 mb-4"
+              >
+                <ArrowLeft size={16} /> Back to Incomes
+              </Link>
+              <Link
+                to="/expenses"
+                className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 mb-4"
+              >
+                <ArrowLeft size={16} /> Back to Expenses
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {renderCategoryList(incomeCategories, "income")}
+              {renderCategoryList(expenseCategories, "expense")}
+            </div>
           </div>
         )}
       </div>

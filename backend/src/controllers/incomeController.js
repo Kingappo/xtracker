@@ -55,7 +55,7 @@ export const getIncomes = async (req, res) => {
 
     const incomes = await Income.find(filter)
       .populate("category", "name type")
-      .sort({ date: -1 });
+      .sort({ date: -1, createdAt: -1 });
 
     res.status(200).json({ incomes });
   } catch (error) {
